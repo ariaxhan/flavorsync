@@ -1,10 +1,3 @@
-//
-//  RegistrationView.swift
-//  flavorsync
-//
-//  Created by Aria Han on 7/9/24.
-//
-
 import SwiftUI
 
 struct RegistrationView: View {
@@ -24,7 +17,7 @@ struct RegistrationView: View {
                         Image(systemName: "envelope.fill")
                             .foregroundColor(Color(red: 74/255, green: 192/255, blue: 100/255))
                         TextField("Email", text: $viewModel.email)
-                            .foregroundColor(.white)
+                            .foregroundColor(.black)
                             .padding(.leading, 10)
                     }
                     .padding()
@@ -36,7 +29,7 @@ struct RegistrationView: View {
                         Image(systemName: "person.fill")
                             .foregroundColor(Color(red: 74/255, green: 192/255, blue: 100/255))
                         TextField("Username", text: $viewModel.username)
-                            .foregroundColor(.white)
+                            .foregroundColor(.black)
                             .padding(.leading, 10)
                     }
                     .padding()
@@ -49,11 +42,11 @@ struct RegistrationView: View {
                             .foregroundColor(Color(red: 74/255, green: 192/255, blue: 100/255))
                         if isPasswordVisible {
                             TextField("Password", text: $viewModel.password)
-                                .foregroundColor(.white)
+                                .foregroundColor(.black)
                                 .padding(.leading, 10)
                         } else {
                             SecureField("Password", text: $viewModel.password)
-                                .foregroundColor(.white)
+                                .foregroundColor(.black)
                                 .padding(.leading, 10)
                         }
                         Button(action: {
@@ -95,10 +88,9 @@ struct RegistrationView: View {
                 }
                 Spacer()
             }
+            .navigationTitle("Register")
         }
-        .alert(isPresented: $viewModel.isAuthenticated) {
-            Alert(title: Text("Registration Successful"), message: Text("You have successfully registered."), dismissButton: .default(Text("OK")))
-        }
+        .navigate(to: PreferencesView(), when: $viewModel.isAuthenticated)
     }
 }
 

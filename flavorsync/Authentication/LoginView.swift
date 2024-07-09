@@ -1,10 +1,3 @@
-//
-//  LoginView.swift
-//  flavorsync
-//
-//  Created by Aria Han on 7/9/24.
-//
-
 import SwiftUI
 
 struct LoginView: View {
@@ -30,8 +23,8 @@ struct LoginView: View {
                         HStack {
                             Image(systemName: "person.fill")
                                 .foregroundColor(Color(red: 74/255, green: 192/255, blue: 100/255))
-                            TextField("Username , Email", text: $viewModel.email)
-                                .foregroundColor(.white)
+                            TextField("Username, Email", text: $viewModel.email)
+                                .foregroundColor(.black)
                                 .padding(.leading, 10)
                         }
                         .padding()
@@ -44,11 +37,11 @@ struct LoginView: View {
                                 .foregroundColor(Color(red: 74/255, green: 192/255, blue: 100/255))
                             if isPasswordVisible {
                                 TextField("Password", text: $viewModel.password)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(.black)
                                     .padding(.leading, 10)
                             } else {
                                 SecureField("Password", text: $viewModel.password)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(.black)
                                     .padding(.leading, 10)
                             }
                             Button(action: {
@@ -104,6 +97,7 @@ struct LoginView: View {
             .alert(isPresented: $viewModel.isAuthenticated) {
                 Alert(title: Text("Login Successful"), message: Text("You have successfully logged in."), dismissButton: .default(Text("OK")))
             }
+            .navigate(to: PreferencesView(), when: $viewModel.isAuthenticated)
         }
     }
 }

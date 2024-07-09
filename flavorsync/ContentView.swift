@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  blossom
-//
-//  Created by Aria Han on 6/16/24.
-//
-
 import SwiftUI
 
 struct ContentView: View {
@@ -13,7 +6,7 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             NavigationStack {
-                AuthenticationFlowView(showSignInView: $showSignInView) // Show AuthenticationFlowView directly
+                AuthenticationFlowView(showSignInView: $showSignInView)
             }
         }
         .onAppear {
@@ -31,7 +24,7 @@ struct AuthenticationFlowView: View {
             if showSignInView {
                 AuthenticationView()
             } else {
-                AuthenticationView()
+                PreferencesView()
             }
         }
         .animation(.easeInOut, value: showSignInView)

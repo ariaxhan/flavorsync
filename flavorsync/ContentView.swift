@@ -1,61 +1,43 @@
 //
 //  ContentView.swift
-//  flavorsync
+//  blossom
 //
-//  Created by Aria Han on 7/9/24.
+//  Created by Aria Han on 6/16/24.
 //
 
 import SwiftUI
-import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
-
+    @State private var showSignInView: Bool = false
+    
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
-                }
-                .onDelete(perform: deleteItems)
+        ZStack {
+            NavigationStack {
+                AuthenticationFlowView(showSignInView: $showSignInView) // Show AuthenticationFlowView directly
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-        } detail: {
-            Text("Select an item")
+        }
+        .onAppear {
+            let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
+            self.showSignInView = authUser == nil
         }
     }
+}
 
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
+struct AuthenticationFlowView: View {
+    @Binding var showSignInView: Bool
+    
+    var body: some View {
+        VStack {
+            if showSignInView {
+                AuthenticationView()
+            } else {
+                AuthenticationView()
             }
         }
+        .animation(.easeInOut, value: showSignInView)
     }
 }
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
 }

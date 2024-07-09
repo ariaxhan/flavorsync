@@ -1,32 +1,35 @@
-//
-//  flavorsyncApp.swift
-//  flavorsync
-//
-//  Created by Aria Han on 7/9/24.
-//
-
 import SwiftUI
-import SwiftData
+import Firebase
+import FirebaseAppCheck
 
 @main
 struct flavorsyncApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
+    
+    init() {
+        // Configure Firebase
+        FirebaseApp.configure()
+        
+        // Configure Firebase App Check
+        if #available(iOS 14.0, *) {
+            let providerFactory = AppAttestProviderFactory()
+            AppCheck.setAppCheckProviderFactory(providerFactory)
+        } else {
+            print("App Attest is not available on this version of iOS")
         }
-    }()
-
+    }
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationView {
+                ContentView()
+            }
         }
-        .modelContainer(sharedModelContainer)
+    }
+}
+
+@available(iOS 14.0, *)
+class AppAttestProviderFactory: NSObject, AppCheckProviderFactory {
+    func createProvider(with app: FirebaseApp) -> AppCheckProvider? {
+        return AppAttestProvider(app: app)
     }
 }
